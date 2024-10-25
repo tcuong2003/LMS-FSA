@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ other_user.username }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-left">{{ other_user.username }}</h1>
+
+    <!-- Chat messages -->
+    <div class="mt-4">
+        <div class="chat-box">
+            <ul class="list-group mb-4">
+                {% for message in messages %}
+                    <li class="list-group-item {% if message.sender == other_user %}received{% else %}sent{% endif %}">
+                        <div class="message-content">
+                            <strong>{{ message.sender.username }}:</strong>
+                            <p class="message-text">{{ message.message }}</p>
+                            <small class="text-muted">({{ message.timestamp|date:"M d, Y h:i A" }})</small>
+                        </div>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item no-messages">No messages yet. Start the conversation!</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Form to send a new message -->
+    <h2 class="text-center">Send a Message</h2>
+    <form method="POST" class="mb-4">
+        {% csrf_token %}
+
+        <!-- Hidden field to set the sender (current logged-in user) -->
+        <input type="hidden" name="sender" value="{{ user.username }}">
+
+        <!-- Hidden field to set the receiver (other_user) -->
+        <input type="hidden" name="receiver" value="{{ other_user.username }}">
+
+        <!-- Message input field -->
+        <div class="form-group">
+            <textarea id="message" name="message" rows="3" class="form-control message-input" placeholder="Type your message..." required></textarea>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary send-btn">Send Message</button>
+        </div>
+    </form>
+
+    <!-- Back to User List -->
+    <div class="text-center">
+        <a href="{% url 'chat:user_list' %}" class="btn btn-secondary back-btn">Back to User List</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var chatBox = document.querySelector('.chat-box');
+        chatBox.scrollTop = chatBox.scrollHeight;  // Automatically scroll to the bottom
+    });
+</script>
+
+<style>
+    /* General styles */
+    .container {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    h1, h2 {
+        color: #4b4b4b;
+        font-family: 'Arial', sans-serif;
+        margin-bottom: 20px;
+    }
+
+    /* Chat Box Styling */
+    .chat-box {
+        display: flex;
+        flex-direction: column;
+        height: 400px;
+        overflow-y: auto;
+        border: 1px solid #e0e0e0;
+        padding: 15px;
+        background-color: #fff5e6;
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .list-group-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 12px;
+        margin-bottom: 8px;
+        border-radius: 15px;
+        max-width: 65%; /* Limit message width */
+    }
+
+    .no-messages {
+        text-align: center;
+        font-style: italic;
+        color: #6c757d;
+    }
+
+    /* Received message styling */
+    .received {
+        background-color: #f0f0f0;
+        align-self: flex-start;
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Sent message styling */
+    .sent {
+        background-color: #007bff;
+        color: white;
+        align-self: flex-end;
+        text-align: right;
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .message-text {
+        margin: 0;
+        padding: 5px 0;
+    }
+
+    .list-group-item small {
+        display: block;
+        margin-top: 5px;
+        font-size: 12px;
+        color: #6c757d;
+    }
+
+    /* Form Styling */
+    .message-input {
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        resize: none;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .send-btn {
+        background-color: #007bff;
+        padding: 10px 30px;
+        border-radius: 25px;
+        font-weight: bold;
+    }
+
+    .send-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .back-btn {
+        margin-top: 10px;
+        padding: 8px 20px;
+        font-weight: bold;
+    }
+    
+</style>
+{% endblock %}

@@ -1,0 +1,21 @@
+<h3>Course-wise Progress Report</h3>
+{% if course_progress %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Progress (%)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for progress in course_progress %}
+        <tr>
+            <td>{{ progress.user.username }}</td>
+            <td>{{ progress.progress_percentage }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No progress found for this course.</p>
+{% endif %}

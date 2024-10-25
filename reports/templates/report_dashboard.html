@@ -1,0 +1,82 @@
+{% extends "baseRe.html" %}
+{% block title %}Reports Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Course Reports Dashboard</h2>
+
+    <!-- Tab Navigation -->
+    <ul class="nav nav-tabs" id="reportTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="individual-tab" data-bs-toggle="tab" href="#individual" role="tab" aria-controls="individual" aria-selected="true">Individual Progress</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="course-tab" data-bs-toggle="tab" href="#course" role="tab" aria-controls="course" aria-selected="false">Course Progress</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="overall-tab" data-bs-toggle="tab" href="#overall" role="tab" aria-controls="overall" aria-selected="false">Overall Progress</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="top-tab" data-bs-toggle="tab" href="#top" role="tab" aria-controls="top" aria-selected="false">Top Performers</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="risk-tab" data-bs-toggle="tab" href="#risk" role="tab" aria-controls="risk" aria-selected="false">At-Risk Students</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="last-tab" data-bs-toggle="tab" href="#last" role="tab" aria-controls="last" aria-selected="false">Last Accessed</a>
+        </li>
+    </ul>
+
+    <!-- Tab Content (Initially empty, filled by AJAX) -->
+    <div class="tab-content mt-4">
+        <div class="tab-pane fade show active" id="individual" role="tabpanel">
+            <p>Loading...</p>
+        </div>
+        <div class="tab-pane fade" id="course" role="tabpanel">
+            <p>Loading...</p>
+        </div>
+        <div class="tab-pane fade" id="overall" role="tabpanel">
+            <p>Loading...</p>
+        </div>
+        <div class="tab-pane fade" id="top" role="tabpanel">
+            <p>Loading...</p>
+        </div>
+        <div class="tab-pane fade" id="risk" role="tabpanel">
+            <p>Loading...</p>
+        </div>
+        <div class="tab-pane fade" id="last" role="tabpanel">
+            <p>Loading...</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Function to load data when a tab is clicked
+    function loadReportData(reportType, tabId) {
+        $.ajax({
+            url: `/reports/${reportType}/`, // Corresponding report URL
+            method: 'GET',
+            success: function(data) {
+                $(tabId).html(data);  // Insert the returned HTML into the tab content
+            },
+            error: function(error) {
+                $(tabId).html('<p>Error loading data.</p>');
+            }
+        });
+    }
+
+    // Event listener for tab changes
+    $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var reportType = e.target.id.split('-')[0]; // Gets the report type from the tab ID (e.g., 'individual')
+        var tabId = $(e.target).attr('href'); // Gets the tab ID (e.g., '#individual')
+        if ($(tabId).find('p').text() === 'Loading...') { // Only load if not already loaded
+            loadReportData(reportType, tabId);
+        }
+    });
+
+    // Initially load the first tab (Individual Progress)
+    loadReportData('individual', '#individual');
+</script>
+{% endblock %}

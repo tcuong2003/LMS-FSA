@@ -1,0 +1,23 @@
+<h3>Last Accessed Report</h3>
+{% if last_accessed %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Course</th>
+            <th>Last Accessed</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in last_accessed %}
+        <tr>
+            <td>{{ entry.user.username }}</td>
+            <td>{{ entry.course.name }}</td>
+            <td>{{ entry.last_accessed }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No recent activity found.</p>
+{% endif %}

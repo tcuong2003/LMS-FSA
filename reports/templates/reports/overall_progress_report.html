@@ -1,0 +1,23 @@
+<h3>Overall Progress Report</h3>
+{% if overall_progress %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Course</th>
+            <th>Average Progress (%)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for progress in overall_progress %}
+        <tr>
+            <td>{{ progress.user__username }}</td>
+            <td>{{ progress.course__name }}</td>
+            <td>{{ progress.avg_progress }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No overall progress found.</p>
+{% endif %}

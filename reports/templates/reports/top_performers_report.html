@@ -1,0 +1,23 @@
+<h3>Top Performers Report</h3>
+{% if top_performers %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Course</th>
+            <th>Progress (%)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for performer in top_performers %}
+        <tr>
+            <td>{{ performer.user.username }}</td>
+            <td>{{ performer.course.name }}</td>
+            <td>{{ performer.progress_percentage }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No top performers found.</p>
+{% endif %}

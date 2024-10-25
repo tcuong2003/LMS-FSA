@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4">Assessments</h2>
+<div class="container mt-4">
+    <form method="GET" action="{% url 'assessment:assessment_list' %}" class="form-inline justify-content-center mt-3">
+        <div class="row w-100"> <!-- Add the row class for proper alignment -->
+            <div class="form-group select-group col-md-3">
+                <!-- Dropdown -->
+                <select class="form-control w-100" id="courseSelect" name="course" onchange="this.form.submit()">
+                    <option value="">All Courses</option>
+                    {% for course in courses %}
+                        <option value="{{ course.id }}" {% if course.id|stringformat:"s" == selected_course %}selected{% endif %}>
+                            {{ course.course_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group search-group col-md-7">
+                <!-- Search Input -->
+                <input type="text" class="form-control w-100" placeholder="Enter an assessment..." id="searchInput" onkeyup="search()">
+            </div>
+            <div class="form-group col-12 col-md-2">
+                <!-- Button -->
+                <a href="{% url 'assessment:assessment_create' %}" class="btn btn-primary">Create Assessment</a>
+            </div>
+        </div>
+    </form>
+    
+
+    <!-- Row to display assessments in a card layout -->
+    <div class="row" id="quizCards">
+        {% for item in assessments_with_counts %}
+        <div class="col-md-6">
+            <div class="quiz-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-description d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">
+                                    <span class="description">{{ item.assessment.title }} </span>
+                                    <span class="small-description ">{{ item.assessment.assessment_type }}</span>
+                                </h5>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <!-- Edit Button -->
+                                <a href="{% url 'assessment:assessment_edit' item.assessment.pk %}" class="btn btn-outline-secondary btn-sm me-2">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a class="btn btn-outline-primary btn-sm" href="{% url 'assessment:assessment_detail' item.assessment.pk %}">
+                                    <i class="fas fa-arrow-right"></i> Open
+                                    
+                                </a>
+                            
+                            </div>
+                            
+                        </div>   
+
+                        <div class="stats-container mt-3"> 
+                            <div class="row">
+                                <div class="col-md-8"> <!-- Column for Course and Progress -->
+                                    <p class="card-text"><strong>Course:</strong> {{ item.assessment.course }}</p>
+                                    <div class="qualifying mt-3 d-flex align-items-center">  <!-- Progress bar container -->
+                                        <small><strong>Qualify: </strong></small>
+                                        <div class="progress mx-2" style="flex-grow: 1;"> <!-- Add mx-2 for horizontal spacing -->
+                                            <div class="progress-bar" role="progressbar" style="width: {{ item.assessment.qualified_count }}%;" aria-valuenow="{{ item.assessment.qualified_count }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <small class="qualifying-percentage">{{ item.assessment.qualified_count }}%</small>    
+                                    </div>
+
+                                    <div class="assessment-details mt-3">
+                                        <div class="row">
+                                            <div class="col text-center">
+                                                <p class="card-text">
+                                                    Exercises<br>
+                                                    <h5>{{ item.exercise_count }}</h5>
+                                                </p>
+                                            </div>
+                                            <div class="col text-center">
+                                                <p class="card-text">
+                                                    Multiple choice<br>
+                                                    <h5>{{ item.question_count }}</h5>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 d-flex justify-content-end"> <!-- Column for Invited, Assessed, Qualified -->
+                                    <div class="invited-assessed-qualified text-end"> <!-- Align text to the right -->
+                                        <p style="margin-bottom: 0;">{{ item.assessment.invited_count }} invited <i class="fa-regular fa-circle"></i></p>
+                                        <p style="margin-bottom: 0;">{{ item.assessment.assessed_count }} assessed <i class="fa-solid fa-circle"></i></p>
+                                        <p style="margin-bottom: 0;">{{ item.assessment.qualified_count }} qualified <i class="fa-solid fa-circle"></i></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+    
+                    <div class="card-footer footer-actions d-flex justify-content-between">
+                        <a href="{% url 'assessment:take_assessment' item.assessment.pk %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-circle"></i> Preview
+                        </a>
+                        
+                        <a href="{% url 'assessment:invite_candidates' item.assessment.pk %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-envelope"></i> Send Invitation
+                        </a>
+                        
+                        <div class="copy-preview-duplicate">
+                            <a class="btn btn-outline-primary btn-sm" href="#" onclick="copyInviteLink(event, '{{ item.assessment.invite_link }}')" title="Copy invite link">
+                                <i class="fas fa-copy"></i> Copy invite link
+                            </a>
+                        </div>
+    
+                        <a href="{% url 'assessment:assessment_detail' item.assessment.pk %}" style="text-decoration: none; color: gray"> 
+                            <i class="fas fa-user"></i> {{ item.assessment.created_by }} | {{ item.assessment.created_at|date:"Y-m-d" }}
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

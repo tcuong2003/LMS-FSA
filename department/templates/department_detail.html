@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Phòng Ban</title>
+</head>
+<body>
+    <h1>Chi Tiết Phòng Ban</h1>
+    <p><strong>Tên:</strong> {{ department.name }}</p>
+    <p><strong>Vị Trí:</strong> {{ department.location.name }}</p>
+    <p><strong>Địa chỉ:</strong> {{ department.location.address }}</p>
+    <p><strong>Người Dùng Liên Quan:</strong>
+        <ul>
+            {% for user in department.users.all %}
+            <li>{{ user.username }}</li>
+            {% endfor %}
+        </ul>
+    </p>
+
+    <a href="{% url 'department:department_update' department.pk %}">Chỉnh Sửa</a>
+    <a href="{% url 'department:department_list' %}">Quay Lại Danh Sách</a>
+</body>
+</html>

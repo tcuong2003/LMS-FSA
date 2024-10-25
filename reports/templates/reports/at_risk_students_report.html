@@ -1,0 +1,23 @@
+<h3>At-Risk Students Report</h3>
+{% if at_risk_students %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Course</th>
+            <th>Progress (%)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in at_risk_students %}
+        <tr>
+            <td>{{ student.user.username }}</td>
+            <td>{{ student.course.name }}</td>
+            <td>{{ student.progress_percentage }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No at-risk students found.</p>
+{% endif %}
