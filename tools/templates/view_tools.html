@@ -53,3 +53,109 @@ function showWord() {
 }
 </script>
 {% endblock %}
+
+{% comment %} {% extends 'base.html' %}
+{% block title %}Convert Tools{% endblock %}
+{% block content %}
+<div class="container">
+    <h2 class="my-4 text-center">Convert Tools</h2>
+    <ul class="nav nav-tabs" id="convertTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="excel-tab" data-toggle="tab" href="#excel-content" role="tab" aria-controls="excel" aria-selected="true">Excel to JSON</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="txt-tab" data-toggle="tab" href="#txt-content" role="tab" aria-controls="txt" aria-selected="false">TXT to JSON</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="word-tab" data-toggle="tab" href="#word-content" role="tab" aria-controls="word" aria-selected="false">Word to JSON</a>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-4" id="convertTabContent">
+        <!-- Tab for Excel to JSON -->
+        <div class="tab-pane fade show active" id="excel-content" role="tabpanel" aria-labelledby="excel-tab">
+            <div id="excel-container">
+                <p>Loading Excel content...</p>
+            </div>
+        </div>
+
+        <!-- Tab for TXT to JSON -->
+        <div class="tab-pane fade" id="txt-content" role="tabpanel" aria-labelledby="txt-tab">
+            <div id="txt-container">
+                <p>Loading TXT content...</p>
+            </div>
+        </div>
+
+        <!-- Tab for Word to JSON -->
+        <div class="tab-pane fade" id="word-content" role="tabpanel" aria-labelledby="word-tab">
+            <div id="word-container">
+                <p>Loading Word content...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function loadExcelContent() {
+            fetch("{% url 'tools:excel_to_json_view' %}")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('excel-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error fetching Excel content:', error));
+        }
+    
+        function loadTxtContent() {
+            fetch("{% url 'tools:txt_to_json_view' %}")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('txt-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error fetching TXT content:', error));
+        }
+    
+        function loadWordContent() {
+            fetch("{% url 'tools:word_to_json_view' %}")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('word-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error fetching Word content:', error));
+        }
+    
+        // Load Excel content by default on page load
+        loadExcelContent();
+        loadTxtContent();
+        loadWordContent();
+    
+        // Add event listeners for each tab
+        document.querySelectorAll('a[data-toggle="tab"]').forEach(tab => {
+            tab.addEventListener('shown.bs.tab', function(event) {
+                if (event.target.id === 'excel-tab') {
+                    loadExcelContent();
+                } else if (event.target.id === 'txt-tab') {
+                    loadTxtContent();
+                } else if (event.target.id === 'word-tab') {
+                    loadWordContent();
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}  {% endcomment %}

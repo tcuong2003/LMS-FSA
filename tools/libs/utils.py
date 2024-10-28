@@ -56,18 +56,18 @@ def excel_to_json(data):
     for index, row in data.iterrows():
         try:
             # Extract question and answers
-            answers = [row[f'options[{label}]'] for label in 'ABCDEFG' if pd.notnull(row[f'options[{label}]'])]
+            answers = [row[f'options[{label.lower()}]'] for label in 'ABCDEFG' if pd.notnull(row[f'options[{label.lower()}]'])]
             correct_label = row['correct'].strip().upper()
             # Arrange answers based on the correct label
             arranged_answers = arrange_answers(answers, correct_label) if correct_label in 'ABCDEFG' else answers
 
             cleaned_question = clean_text(str(row['question']))
-            cleaned_answers = [clean_text(f"{chr(65 + i)}- {answer}") for i, answer in enumerate(arranged_answers)]
+            cleaned_answers = [clean_text(str(answer)) for answer in arranged_answers]
+
 
             question_data = {
                 "question": cleaned_question,
-                "answers": cleaned_answers,
-                "correct": correct_label  # Thêm trường correct vào đây
+                "answers": cleaned_answers
             }
             # Add the question data to the list
             output_structure["mc_questions"].append(question_data)
@@ -129,24 +129,6 @@ def word_to_json(content):
     json_data = json.dumps(output_structure, indent=4, ensure_ascii=False)
     
     return json_data
-
-def txt_to_json(texts):
-    """Chuyển đổi danh sách các chuỗi văn bản thành định dạng JSON."""
-    json_output = {
-        "mc_questions": []
-    }
-
-    # Xử lý từng đoạn văn bản trong texts
-    for text in texts:
-        question = {
-            "question_text": text.strip(),  # Dữ liệu câu hỏi
-            "options": []  # Tùy chọn có thể được thêm vào sau
-        }
-        json_output["mc_questions"].append(question)
-
-    # Trả về chuỗi JSON
-    return json.dumps(json_output, indent=4, ensure_ascii=False)
-
 
 # Streamlit UI code
 st.title("Question Generator")

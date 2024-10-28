@@ -10,8 +10,10 @@
 }
 
 #previewTable tbody {
-    max-height: 200px; /* Giới hạn chiều cao của tbody */
-    overflow-y: auto; /* Thêm thanh cuộn nếu nội dung vượt quá chiều cao */
+    max-height: 200px;
+    /* Giới hạn chiều cao của tbody */
+    overflow-y: auto;
+    /* Thêm thanh cuộn nếu nội dung vượt quá chiều cao */
 }
 
 #previewTable tbody td {
@@ -36,36 +38,54 @@
 }
 
 /* Search and fullscreen icon styling */
-#searchIcon, #fullscreenIcon {
+#searchIcon,
+#fullscreenIcon {
     font-size: 20px;
 }
+
 .previewTable {
-    width: 100%; /* Chiều rộng 100% của phần chứa */
-    height: 400px; /* Chiều cao cố định cho khi không phóng to */
-    transition: all 0.3s ease; /* Hiệu ứng chuyển tiếp mượt mà */
-    overflow-y: auto; /* Thêm than  h cuộn nếu cần */
+    width: 100%;
+    /* Chiều rộng 100% của phần chứa */
+    height: 400px;
+    /* Chiều cao cố định cho khi không phóng to */
+    transition: all 0.3s ease;
+    /* Hiệu ứng chuyển tiếp mượt mà */
+    overflow-y: auto;
+    /* Thêm than  h cuộn nếu cần */
 }
 
 .pagination {
-    z-index: 0; /* Đảm bảo phần phân trang nằm dưới bảng fullscreen */
+    z-index: 0;
+    /* Đảm bảo phần phân trang nằm dưới bảng fullscreen */
 }
 
 .previewTable.fullscreen {
-    width: 100vw; /* Chiếm toàn bộ chiều rộng màn hình */
-    height: 100vh; /* Chiếm toàn bộ chiều cao màn hình */
-    position: fixed; /* Đảm bảo vị trí cố định */
-    top: 1; /* Đặt ở trên cùng */
-    left: 0; /* Đặt ở bên trái */
-    z-index: 999999; /* Z-index rất cao để nằm trên tất cả các thành phần khác */
-    overflow: auto; /* Thêm thanh cuộn nếu cần */
-    background-color: white; /* Màu nền trắng */
-    color: black; /* Màu chữ đen */
-}    
+    width: 100vw;
+    /* Chiếm toàn bộ chiều rộng màn hình */
+    height: 100vh;
+    /* Chiếm toàn bộ chiều cao màn hình */
+    position: fixed;
+    /* Đảm bảo vị trí cố định */
+    top: 1;
+    /* Đặt ở trên cùng */
+    left: 0;
+    /* Đặt ở bên trái */
+    z-index: 999999;
+    /* Z-index rất cao để nằm trên tất cả các thành phần khác */
+    overflow: auto;
+    /* Thêm thanh cuộn nếu cần */
+    background-color: white;
+    /* Màu nền trắng */
+    color: black;
+    /* Màu chữ đen */
+}
 
 .navbar-hidden {
-    display: none !important; /* Ẩn thanh navbar hoàn toàn */
+    display: none !important;
+    /* Ẩn thanh navbar hoàn toàn */
 }
 
 body.fullscreen {
-    overflow: hidden; /* Ẩn thanh cuộn */
+    overflow: hidden;
+    /* Ẩn thanh cuộn */
 }
