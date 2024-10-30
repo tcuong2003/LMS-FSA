@@ -79,16 +79,27 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll('.dropdown-item:contains("Logout")').forEach(function(logoutButton) {
-                logoutButton.addEventListener("click", function(event) {
-                    event.preventDefault();
-                    fetch("{% url 'main:logout' %}", {
-                        method: "POST",
-                        headers: {
-                            "X-CSRFToken": "{{ csrf_token }}"
-                        }
+            // Tìm tất cả các phần tử dropdown-item
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            
+            dropdownItems.forEach(function(item) {
+                // Kiểm tra nếu nội dung của phần tử là "Logout"
+                if (item.textContent.trim() === "Logout") {
+                    item.addEventListener("click", function(event) {
+                        event.preventDefault();
+                        fetch("{% url 'main:logout' %}", {
+                            method: "POST",
+                            headers: {
+                                "X-CSRFToken": "{{ csrf_token }}"
+                            }
+                        }).then(response => {
+                            if (response.ok) {
+                                // Redirect or perform any action after logout
+                                window.location.href = "{% url 'main:home' %}"; // Redirect to home page after logout
+                            }
+                        });
                     });
-                });
+                }
             });
         });
     </script>
